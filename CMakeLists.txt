@@ -50,9 +50,18 @@ LIST(APPEND TENSORRT_LIBS
 	nvinfer_plugin
 	nvparsers)
 
+LIST(APPEND OPENCV_LIBS
+	opencv_core
+	opencv_highgui
+	opencv_videoio
+	opencv_imgcodecs
+	opencv_imgproc)
+
+
 LIST(APPEND LIB_LIST
 	${CUDA_LIBRARIES}
 	${TENSORRT_LIBS}
+	${OPENCV_LIBS}
 	pthread)
 
 #generate binary
