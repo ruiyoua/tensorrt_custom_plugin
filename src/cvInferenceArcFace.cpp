@@ -83,7 +83,7 @@ bool cvInferenceArcFace::afterInference() {
 	for (int i = 0; i < m_output_dims[0].d[0]; i++) {
 		std::cout << m_output[0][i] << "\t";
 		if ((i+1) % 10 == 0)
-			std::cout << std::endl;
+			std::cout << "\n";
 	}
 
 	return true;
