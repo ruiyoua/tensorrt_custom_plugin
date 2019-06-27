@@ -24,11 +24,11 @@ bool cvInferenceArcFace::CreateTrtModel(const std::string& trt_model) {
 	std::ifstream check(trt_model.c_str(),std::ios::in | std::ios::binary);
 	std::ifstream check_name((trt_model + ".name").c_str(), std::ios::in);
     if (check.is_open() && check_name.is_open()){
-        std::cout << "ARC_FACE " << trt_model << " model file exist";
+        std::cout << "ARC_FACE " << trt_model << " model file exist" << std::endl;
         return true;
     }
 
-    std::cout << "ARC_FACE " << "create model file : " << trt_model;
+    std::cout << "ARC_FACE " << "create model file : " << trt_model << std::endl;
     m_output_name.push_back(OUTPUT_BLOB_NAME);
 
     nvinfer1::ICudaEngine* engine = cvInferenceBase::caffeToTRTModel(

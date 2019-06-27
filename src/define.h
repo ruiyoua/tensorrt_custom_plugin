@@ -11,13 +11,13 @@
 
 
 #define CHECK(val) if (!val) { \
-		std::cout << __FILE__ << "("<< __LINE__ << ")CHECK fail";	\
+		std::cout << __FILE__ << "("<< __LINE__ << ")CHECK fail" << std::endl;	\
 		exit(0);			\
 	}
 
 
 #define CHECK_EQ(val1, val2) if (val1 != val2) { \
-		std::cout << __FILE__ << "("<< __LINE__ << ")CHECK_EQ fail";	\
+		std::cout << __FILE__ << "("<< __LINE__ << ")CHECK_EQ fail" << std::endl;	\
 		exit(0);			\
 	}
 

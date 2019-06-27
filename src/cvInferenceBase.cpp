@@ -178,7 +178,7 @@ nvinfer1::ICudaEngine* cvInferenceBase::caffeToTRTModel(
     // specify which tensors are outputs
     for (auto& s : outputs) {
         IF_NOT (blobNameToTensor->find(s.c_str()) != nullptr) {
-            std::cout << "could not find output blob " << s;
+            std::cout << "could not find output blob " << s << std::endl;
             return nullptr;
         }
         network->markOutput(*blobNameToTensor->find(s.c_str()));
@@ -189,7 +189,7 @@ nvinfer1::ICudaEngine* cvInferenceBase::caffeToTRTModel(
     	nvinfer1::Dims3 dims = static_cast<nvinfer1::Dims3&&>(network->getInput(i)->getDimensions());
     	inputs.push_back(network->getInput(i)->getName());
     	std::cout << "Caffe Input \"" << network->getInput(i)->getName() << "\": "
-        		<< dims.d[0] << "x" << dims.d[1] << "x" << dims.d[2];
+        		<< dims.d[0] << "x" << dims.d[1] << "x" << dims.d[2] << std::endl;
     }
 
     for (int i = 0, n = network->getNbOutputs(); i < n; i++)
@@ -197,7 +197,7 @@ nvinfer1::ICudaEngine* cvInferenceBase::caffeToTRTModel(
     	nvinfer1::Dims3 dims = static_cast<nvinfer1::Dims3&&>(network->getOutput(i)->getDimensions());
 //    	outputs.push_back(network->getOutput(i)->getName());
     	std::cout << "Caffe Output \"" << network->getOutput(i)->getName() << "\": "
-        		<< dims.d[0] << "x" << dims.d[1] << "x" << dims.d[2];
+        		<< dims.d[0] << "x" << dims.d[1] << "x" << dims.d[2] << std::endl;
     }
 
     //configure Builder
@@ -205,10 +205,12 @@ nvinfer1::ICudaEngine* cvInferenceBase::caffeToTRTModel(
 	builder->setMaxWorkspaceSize(1ULL << 30);			//max gpu memory 1 Giga
 	builder->setFp16Mode(fp16);
 
+	std::cout << "building cuda engine......." << std::endl;
+
 	// Build the engine
     nvinfer1::ICudaEngine* engine = builder->buildCudaEngine(*network);
     IF_NOT (engine != nullptr)
-    	std::cout << "could not build engine";
+    	std::cout << "could not build engine" << std::endl;
 
     parser->destroy();
     network->destroy();
@@ -241,7 +243,7 @@ nvinfer1::ICudaEngine* cvInferenceBase::uffToTRTModel(
     // specify which tensors are outputs
     for (auto& s : outputs) {
         IF_NOT (parser->registerOutput(s.c_str()))  {
-        	std::cout << "Failed to register output " << s;
+        	std::cout << "Failed to register output " << s << std::endl;
             return nullptr;
         }
     }
@@ -250,7 +252,7 @@ nvinfer1::ICudaEngine* cvInferenceBase::uffToTRTModel(
     CHECK_EQ (inputs.size(), inputDims.size());
     for (int i = 0; i < inputs.size(); i++) {
         if (!parser->registerInput(inputs[i].c_str(), inputDims[i], nvuffparser::UffInputOrder::kNCHW)) {
-        	std::cout << "Failed to register input " << inputs[i];
+        	std::cout << "Failed to register input " << inputs[i] << std::endl;
             return nullptr;
         }
     }
@@ -263,7 +265,7 @@ nvinfer1::ICudaEngine* cvInferenceBase::uffToTRTModel(
     	nvinfer1::Dims3 dims = static_cast<nvinfer1::Dims3&&>(network->getInput(i)->getDimensions());
 //    	inputs.push_back(network->getInput(i)->getName());
         std::cout << "Uff Input \"" << network->getInput(i)->getName() << "\": "
-        		<< dims.d[0] << "x" << dims.d[1] << "x" << dims.d[2];
+        		<< dims.d[0] << "x" << dims.d[1] << "x" << dims.d[2] << std::endl;
     }
 
     for (int i = 0, n = network->getNbOutputs(); i < n; i++)
@@ -271,7 +273,7 @@ nvinfer1::ICudaEngine* cvInferenceBase::uffToTRTModel(
     	nvinfer1::Dims3 dims = static_cast<nvinfer1::Dims3&&>(network->getOutput(i)->getDimensions());
 //    	outputs.push_back(network->getOutput(i)->getName());
     	std::cout << "Uff Output \"" << network->getOutput(i)->getName() << "\": "
-        		<< dims.d[0] << "x" << dims.d[1] << "x" << dims.d[2];
+        		<< dims.d[0] << "x" << dims.d[1] << "x" << dims.d[2] << std::endl;
     }
 
 
@@ -283,7 +285,7 @@ nvinfer1::ICudaEngine* cvInferenceBase::uffToTRTModel(
     // Build the engine
 	nvinfer1::ICudaEngine* engine = builder->buildCudaEngine(*network);
     IF_NOT (engine != nullptr)
-		std::cout << "could not build engine";
+		std::cout << "could not build engine" << std::endl;
 
     parser->destroy();
     network->destroy();
@@ -308,7 +310,7 @@ nvinfer1::ICudaEngine* cvInferenceBase::onnxToTRTModel(
     // parse the onnx model to populate the network, then set the outputs
     nvonnxparser::IParser* parser = nvonnxparser::createParser(*network, gLogger);
     IF_NOT (parser->parseFromFile(onnxModelFile.c_str(), verbosity)) {
-    	std::cout << "failed to parse onnx file";
+    	std::cout << "failed to parse onnx file" << std::endl;
         return nullptr;
     }
 
@@ -317,7 +319,7 @@ nvinfer1::ICudaEngine* cvInferenceBase::onnxToTRTModel(
     	nvinfer1::Dims3 dims = static_cast<nvinfer1::Dims3&&>(network->getInput(i)->getDimensions());
     	inputs.push_back(network->getInput(i)->getName());
     	std::cout << "Onnx Input \"" << network->getInput(i)->getName() << "\": "
-        		<< dims.d[0] << "x" << dims.d[1] << "x" << dims.d[2];
+        		<< dims.d[0] << "x" << dims.d[1] << "x" << dims.d[2] << std::endl;
     }
 
     for (int i = 0, n = network->getNbOutputs(); i < n; i++)
@@ -325,7 +327,7 @@ nvinfer1::ICudaEngine* cvInferenceBase::onnxToTRTModel(
     	nvinfer1::Dims3 dims = static_cast<nvinfer1::Dims3&&>(network->getOutput(i)->getDimensions());
     	outputs.push_back(network->getOutput(i)->getName());
     	std::cout << "Onnx Output \"" << network->getOutput(i)->getName() << "\": "
-        		<< dims.d[0] << "x" << dims.d[1] << "x" << dims.d[2];
+        		<< dims.d[0] << "x" << dims.d[1] << "x" << dims.d[2] << std::endl;
     }
 
     //configure Builder
@@ -337,7 +339,7 @@ nvinfer1::ICudaEngine* cvInferenceBase::onnxToTRTModel(
 	nvinfer1::ICudaEngine* engine = builder->buildCudaEngine(*network);
 
     IF_NOT (engine != nullptr) {
-    	std::cout << "could not build engine";
+    	std::cout << "could not build engine" << std::endl;
         return nullptr;
     }
 
@@ -363,7 +365,7 @@ bool cvInferenceBase::saveTrtModel(
 	//output trt model to file
     std::ofstream out(fileName, std::ios::out|std::ios::binary);
     if (!out) {
-    	std::cout << "could not open plan output file: " << fileName;
+    	std::cout << "could not open plan output file: " << fileName << std::endl;
         return false;
     }
 
@@ -376,7 +378,7 @@ bool cvInferenceBase::saveTrtModel(
     std::string strNameFile = fileName + ".name";
     std::ofstream name_out(strNameFile, std::ios::out);
     if (!name_out) {
-    	std::cout << "could not open input/output name file: " << strNameFile;
+    	std::cout << "could not open input/output name file: " << strNameFile << std::endl;
         return false;
     }
 
