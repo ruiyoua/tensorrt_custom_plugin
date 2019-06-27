@@ -15,6 +15,8 @@
 int main(int argc, char** argv) {
 	cvInferenceArcFace inf_face;
 
+	cvInferenceBase::GlobalInit();
+
 	inf_face.Init();
 
 	cv::Mat img = cv::imread(std::string("image/0.jpg"));
@@ -22,6 +24,8 @@ int main(int argc, char** argv) {
 	inf_face.beforeInference(img);
 	inf_face.doInference();
 	inf_face.afterInference();
+
+	cvInferenceBase::GlobalFini();
 
 	return 0;
 }

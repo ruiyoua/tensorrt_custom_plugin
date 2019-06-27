@@ -1,5 +1,5 @@
 //
-// Created by lumi on 19-4-18.
+// Created by chenxq on 19-4-18.
 //
 #include "cvInferenceArcFace.h"
 #include <cuda_runtime_api.h>
